@@ -15,4 +15,10 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 
 app.post("/users", function(request, response){
 	databaseManager.saveProfile(request.body.username,request.body.password);
+	//response.send(request);
+});
+
+app.get("/users", function(request, response){
+	databaseManager.readProfile(request.query.username, request.query.password);
+	//console.log(request);
 });

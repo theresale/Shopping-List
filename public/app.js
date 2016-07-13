@@ -33,12 +33,20 @@ app.controller('registerCtrl', function($scope, $http) {
     };
 });
 
-app.controller('loginCtrl', function($scope) {
-
+app.controller('loginCtrl', function($scope, $http) {
     $scope.verifyUser = function() {
-        $scope.registrationList.push({username:$scope.newUsername, password:$scope.newPassword});
-        $scope.newUsername = "";
-        $scope.newPassword = "";
-        console.log($scope.registrationList);
+        $http({
+            method: "GET",
+            url: "/users",
+            params: {username: $scope.username, password: $scope.password}
+        }).then(function successCallback(data) {
+            console.log("");
+        },
+        function errorCallback(data) {
+            console.log("");
+        });
     };
 });
+
+
+

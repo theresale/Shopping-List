@@ -34,14 +34,23 @@ module.exports = (function() {
 		);
 	}
 
-	var readProfile = function(username, password) {
+	var readProfile = function(username, password, callback) {
+		console.log(username, password)
 		pool.query(
-			"SELECT * FROM profile"+
+			"SELECT id FROM profile"+
 			" WHERE username = $1"+
-			" AND password = $2", [userame, password], function(error, result) {
+			" AND password = $2;", [username, password], function(error, result) {
 				if (error) return console.error(error);
+				var profileID = result.rows[0].id;
+				callback(profileID);
 			}
 		);
+	}
+
+	var partialReadProfile = function(callback) {
+		return (username,password) => {
+			readProfile(username,password,callback);
+		};
 	}
 
 	var readList = function(profile_id) {
