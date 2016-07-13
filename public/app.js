@@ -18,14 +18,18 @@ app.controller('toBuyCtrl', function($scope) {
     };
 });
 
-app.controller('registerCtrl', function($scope) {
-    $scope.registrationList = [{username:'theresa', password:'devcodecamp'}];
-
+app.controller('registerCtrl', function($scope, $http) {
     $scope.addRegistrants = function() {
-        $scope.registrationList.push({username:$scope.newUsername, password:$scope.newPassword});
-        $scope.newUsername = "";
-        $scope.newPassword = "";
-        console.log($scope.registrationList);
+        $http({
+            method: "POST",
+            url: "/users",
+            data: {username: $scope.newUsername, password: $scope.newPassword}
+        }).then(function successCallback(data) {
+            console.log("Registration Successful!");
+        },
+        function errorCallback(data) {
+            console.log("Registration failed, please try again.");
+        });
     };
 });
 

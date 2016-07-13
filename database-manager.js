@@ -1,1 +1,63 @@
 "use strict";
+var Pool = require("pg").Pool;
+
+process.on("unhandledRejection", function(e){
+	console.log(e.message, e.stack);
+}); //error code
+
+module.exports = (function() {
+	var config = {
+		host: 	  "localhost",
+		user: 	  "shopping_server",
+		password: "password",
+		database: "postgres"
+	};
+	var pool = new Pool(config);
+
+	var saveProfile = function(username,password) {
+		pool.query(
+			"INSERT INTO profile" + 
+			" (username, password)" +
+			" VALUES ($1, $2) RETURNING id;", [username, password], function(error, result) { 
+				if (error) return console.error(error);
+			}
+		);
+	}
+
+	var saveList = function(item,profile_id) {
+		pool.query(
+			"INSERT INTO grocery_list" +
+			" (item, profile_id)" +
+			" VALUES ($1, $2);", [item, profile_id], function(error, result) {
+				if (error) return console.error(error);
+			}
+		);
+	}
+
+	var readProfile = function(username, password) {
+		pool.query(
+			"SELECT * FROM profile"+
+			" WHERE username = $1"+
+			" AND password = $2", [userame, password], function(error, result) {
+				if (error) return console.error(error);
+			}
+		);
+	}
+
+	var readList = function(profile_id) {
+		pool.query(
+			"SELECT * FROM grocery_list"+
+			" WHERE profile_id=$1", [profile_id], function(error,result) {
+				if (error) return console.error(error);
+			}
+		);
+	}
+
+	return {
+		saveProfile: saveProfile,
+		saveList: saveList,
+		readProfile: readProfile,
+		readList: readList
+	};
+})();
+

@@ -6,3 +6,13 @@ app.use(express.static("public"));
 app.listen(3000,function(){
 	console.log("listening on port", 3000);
 });
+
+var bodyParser = require('body-parser')
+app.use(bodyParser.json());       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+})); 
+
+app.post("/users", function(request, response){
+	databaseManager.saveProfile(request.body.username,request.body.password);
+});
