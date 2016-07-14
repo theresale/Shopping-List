@@ -1,9 +1,8 @@
 "use strict";
 
 var app = angular.module('myApp', []);
-app.controller('toBuyCtrl', function($scope, $http, sendID) {
+app.controller('toBuyCtrl', function($scope, $http, sendData) {
     $scope.toBuyList = [];
-
     $scope.toBuyItems = [];
 
     $scope.toBuyAdd = function() {
@@ -24,11 +23,19 @@ app.controller('toBuyCtrl', function($scope, $http, sendID) {
         });
     };
 
+    $scope.$on('shoppingListReceived', function() {
+        var array = sendData.userList;
+        for(var i=0; i<array.length; i++){
+        $scope.toBuyList.push({toBuyText:array[i], done:false});
+        $scope.toBuyItems.push(array[i]);
+        }
+    });
+
     $scope.saveList = function() {
         $http({
             method: "PUT",
             url: "/users",
-            data: {item: $scope.toBuyItems, id: sendID.userID}
+            data: {item: $scope.toBuyItems, id: sendData.userID}
         }).then(function successCallback(data) {
             console.log("");
         },
@@ -53,16 +60,17 @@ app.controller('registerCtrl', function($scope, $http) {
     };
 });
 
-app.controller('loginCtrl', function($scope, $http, sendID) {
+app.controller('loginCtrl', function($scope, $http, sendData, $rootScope) {
     $scope.verifyUser = function() {
         $http({
             method: "GET",
             url: "/users",
             params: {username: $scope.username, password: $scope.password}
         }).then(function successCallback(data) {
-            sendID.userID = data.data;
-            console.log(sendID.userID);
-            console.log(data.data);
+             sendData.userID = data.data.rows[0].profile_id;
+             sendData.userList = data.data.rows[0].item;
+             console.log(sendData.userID);
+             $rootScope.$broadcast('shoppingListReceived');
         },
         function errorCallback(error) {
             console.log(error);
@@ -70,9 +78,15 @@ app.controller('loginCtrl', function($scope, $http, sendID) {
     };
 });
 
-app.service('sendID', function(){
+app.service('sendData', function(){
     this.userID = 0;
+    this.userList = [];
 
 });
 
+// app.service('listArrays', function(){
+//     this.toBuyList = [];
+//     this.toBuyItems = [];
+
+// })
 

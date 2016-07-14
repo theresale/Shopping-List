@@ -55,17 +55,17 @@ module.exports = (function() {
 			" AND password = $2;", [username, password], function(error, result) {
 				if (error) return console.error(error);
 				var profileID = result.rows[0].id;
-				callback(profileID);
-				callbackTwo(profileID);
+				callback(profileID, callbackTwo);
 			}
 		);
 	}
 
-	var readList = function(profile_id) {
+	var readList = function(profile_id,callback) {
 		pool.query(
 			"SELECT * FROM grocery_list"+
 			" WHERE profile_id=$1", [profile_id], function(error,result) {
 				if (error) return console.error(error);
+				callback(result);
 			}
 		);
 	}
