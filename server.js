@@ -24,6 +24,5 @@ app.get("/users", function(request, response){
 });
 
 app.put("/users", function(request, response){
-	console.log(request.body.item[0]);
-	//databaseManager.updateList(item,24);
+	databaseManager.updateList(request.body.item,24);
 })

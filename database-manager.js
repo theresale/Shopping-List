@@ -41,7 +41,7 @@ module.exports = (function() {
 		pool.query(
 			"UPDATE grocery_list" +
 			" SET item = $1" +
-			" WHERE id = $2;", [item, profile_id], function(error, result) {
+			" WHERE profile_id = $2;", [item, profile_id], function(error, result) {
 				if (error) return console.error(error);
 			}
 		);
