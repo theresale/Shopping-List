@@ -84,9 +84,4 @@ app.service('sendData', function(){
 
 });
 
-// app.service('listArrays', function(){
-//     this.toBuyList = [];
-//     this.toBuyItems = [];
-
-// })
 
