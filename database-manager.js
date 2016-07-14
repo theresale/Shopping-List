@@ -14,21 +14,34 @@ module.exports = (function() {
 	};
 	var pool = new Pool(config);
 
-	var saveProfile = function(username,password) {
+	var saveProfile = function(username,password,callback) {
 		pool.query(
 			"INSERT INTO profile" + 
 			" (username, password)" +
 			" VALUES ($1, $2) RETURNING id;", [username, password], function(error, result) { 
 				if (error) return console.error(error);
+				var profileID = result.rows[0].id;
+				callback(["apples"], profileID);
 			}
 		);
 	}
 
-	var saveList = function(item,profile_id) {
+	var createList = function(item,profile_id) {
 		pool.query(
 			"INSERT INTO grocery_list" +
 			" (item, profile_id)" +
 			" VALUES ($1, $2);", [item, profile_id], function(error, result) {
+				if (error) return console.error(error);
+			}
+		);
+	}
+
+	var updateList = function(item,profile_id) {
+		console.log(item);
+		pool.query(
+			"UPDATE grocery_list" +
+			" SET item = $1" +
+			" WHERE id = $2;", [item, profile_id], function(error, result) {
 				if (error) return console.error(error);
 			}
 		);
@@ -47,26 +60,22 @@ module.exports = (function() {
 		);
 	}
 
-	var partialReadProfile = function(callback) {
-		return (username,password) => {
-			readProfile(username,password,callback);
-		};
-	}
-
 	var readList = function(profile_id) {
 		pool.query(
 			"SELECT * FROM grocery_list"+
 			" WHERE profile_id=$1", [profile_id], function(error,result) {
 				if (error) return console.error(error);
+				console.log("hellooooooooooooooooooooooooooo")
 			}
 		);
 	}
 
 	return {
 		saveProfile: saveProfile,
-		saveList: saveList,
+		createList: createList,
 		readProfile: readProfile,
-		readList: readList
+		readList: readList,
+		updateList: updateList
 	};
 })();
 

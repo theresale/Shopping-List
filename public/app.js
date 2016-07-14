@@ -1,8 +1,8 @@
 "use strict";
 
 var app = angular.module('myApp', []);
-app.controller('toBuyCtrl', function($scope) {
-    $scope.toBuyList = [{toBuyText:'Clean House', done:false}];
+app.controller('toBuyCtrl', function($scope, $http) {
+    $scope.toBuyList = [{toBuyText:'Your First Item', done:false}];
 
     $scope.toBuyAdd = function() {
         $scope.toBuyList.push({toBuyText:$scope.toBuyInput, done:false});
@@ -14,6 +14,19 @@ app.controller('toBuyCtrl', function($scope) {
         $scope.toBuyList = [];
         angular.forEach(oldList, function(x) {
             if (!x.done) $scope.toBuyList.push(x);
+        });
+    };
+
+    $scope.saveList = function() {
+        $http({
+            method: "PUT",
+            url: "/users",
+            data: {item: $scope.toBuyList}
+        }).then(function successCallback(data) {
+            console.log("");
+        },
+        function errorCallback(data) {
+            console.log("");
         });
     };
 });

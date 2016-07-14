@@ -14,11 +14,16 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 })); 
 
 app.post("/users", function(request, response){
-	databaseManager.saveProfile(request.body.username,request.body.password);
-	//response.send(request);
+	databaseManager.saveProfile(request.body.username,request.body.password,databaseManager.createList);
+	response.send(request.body);
 });
 
 app.get("/users", function(request, response){
-	databaseManager.readProfile(request.query.username, request.query.password);
+	databaseManager.readProfile(request.query.username, request.query.password, databaseManager.readList);
 	//console.log(request);
 });
+
+app.put("/users", function(request, response){
+	console.log(request.body.item[0]);
+	//databaseManager.updateList(item,24);
+})
