@@ -21,7 +21,7 @@ module.exports = (function() {
 			" VALUES ($1, $2) RETURNING id;", [username, password], function(error, result) { 
 				if (error) return console.error(error);
 				var profileID = result.rows[0].id;
-				callback(["apples"], profileID);
+				callback(["Begin List"], profileID);
 			}
 		);
 	}
@@ -37,7 +37,7 @@ module.exports = (function() {
 	}
 
 	var updateList = function(item,profile_id) {
-		console.log(item);
+		//console.log(item);
 		pool.query(
 			"UPDATE grocery_list" +
 			" SET item = $1" +
@@ -47,7 +47,7 @@ module.exports = (function() {
 		);
 	}
 
-	var readProfile = function(username, password, callback) {
+	var readProfile = function(username, password, callback, callbackTwo) {
 		console.log(username, password)
 		pool.query(
 			"SELECT id FROM profile"+
@@ -56,6 +56,7 @@ module.exports = (function() {
 				if (error) return console.error(error);
 				var profileID = result.rows[0].id;
 				callback(profileID);
+				callbackTwo(profileID);
 			}
 		);
 	}
@@ -65,7 +66,6 @@ module.exports = (function() {
 			"SELECT * FROM grocery_list"+
 			" WHERE profile_id=$1", [profile_id], function(error,result) {
 				if (error) return console.error(error);
-				console.log("hellooooooooooooooooooooooooooo")
 			}
 		);
 	}

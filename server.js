@@ -19,10 +19,13 @@ app.post("/users", function(request, response){
 });
 
 app.get("/users", function(request, response){
-	databaseManager.readProfile(request.query.username, request.query.password, databaseManager.readList);
-	//console.log(request);
+	databaseManager.readProfile(request.query.username, request.query.password, databaseManager.readList,function(data){
+		console.log(data);
+		response.send(JSON.stringify(data));
+	});
 });
 
 app.put("/users", function(request, response){
-	databaseManager.updateList(request.body.item,24);
+	console.log(request.body);
+	databaseManager.updateList(request.body.item, request.body.id);
 })
