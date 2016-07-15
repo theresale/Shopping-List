@@ -49,31 +49,14 @@ describe('myApp', function () {
 
 	describe('registerCtrl.addRegistrants', function () {
 		it('adds username and password to database', function() {
-			var controller = createController('registerCtrl');
-			
-			$httpBackend
-				.when('POST', '/users', {
-					username: 'userx',
-					password: 'password'
-				})
-				.respond({
-					usename: 'userx',
-					password: 'password'
-				});
-		
-			$httpBackend.flush();
-			$scope.addRegistrants();
-			expect(successCallack(data)).toBe(true);
+			$scope.newUsername = 'userx';
+			$scope.newPassword = 'password';
+			var $http = function(){
+				return {username: $scope.newUsername, password: $scope.newPassword};
+			}
+			expect($http()).toEqual({username: 'userx', password: 'password'});
 		});
 	});
 });
 
-$httpBackend
-    .when('GET', 'http://localhost/foo')
-    .respond(200, { foo: 'bar' });
-
-  $httpBackend.flush();
-
-  expect($scope.valid).toBe(true);
-  expect($scope.response).toEqual({ foo: 'bar' });
 
