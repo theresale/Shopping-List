@@ -52,10 +52,10 @@ app.controller('registerCtrl', function($scope, $http) {
             url: "/users",
             data: {username: $scope.newUsername, password: $scope.newPassword}
         }).then(function successCallback(data) {
-            console.log("Registration Successful!");
+            return true;
         },
         function errorCallback(error) {
-            console.log("Registration failed, please try again.");
+            return false;
         });
     };
 });
