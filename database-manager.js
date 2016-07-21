@@ -53,6 +53,7 @@ module.exports = (function() {
 			"SELECT id FROM profile"+
 			" WHERE username = $1"+
 			" AND password = $2;", [username, password], function(error, result) {
+				console.log(result);
 				if (error) return console.error(error);
 				var profileID = result.rows[0].id;
 				callback(profileID, callbackTwo);

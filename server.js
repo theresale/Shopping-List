@@ -14,6 +14,7 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 })); 
 
 app.post("/users", function(request, response){
+	console.log(request.body);
 	databaseManager.saveProfile(request.body.username,request.body.password,databaseManager.createList);
 	response.send(request.body);
 });
